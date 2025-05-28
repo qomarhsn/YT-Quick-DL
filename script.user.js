@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         YT Quick DL
 // @namespace    https://github.com/qomarhsn/YT-Quick-DL
-// @version      2.0
-// @description  Adds a floating button to YouTube for quick video downloads via ssyoutube.com.
+// @version      3.0
+// @description  Adds a floating button to YouTube for quick video downloads via cobalt.tools.
 // @author       Qomarul Hasan
 // @license      MIT
 // @match        *://www.youtube.com/watch?v*
@@ -20,7 +20,7 @@
 (function () {
     'use strict';
 
-    async function showUblockSuggestion() {
+    async function showInfoPopup() {
         return new Promise((resolve) => {
             const overlay = document.createElement('div');
             overlay.style.cssText = `
@@ -41,72 +41,49 @@
                 padding: 24px;
                 border-radius: 12px;
                 box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-                max-width: 400px;
+                max-width: 500px;
                 font-family: Roboto, Arial, sans-serif;
                 width: 90%;
-            `;
-
-            const title = document.createElement('h2');
-            title.textContent = 'Ad Blocker Recommended';
-            title.style.cssText = `
-                font-size: 18px;
-                font-weight: 500;
-                margin-bottom: 12px;
-                color: #f1f1f1;
-            `;
-
-            const message = document.createElement('p');
-            message.textContent = 'To avoid ads and redirects on ssyoutube.com, we recommend installing uBlock Origin.';
-            message.style.cssText = `
                 font-size: 14px;
-                color: #aaa;
-                margin-bottom: 16px;
                 line-height: 1.5;
             `;
 
-            const link = document.createElement('a');
-            link.href = 'https://ublockorigin.com/';
-            link.target = '_blank';
-            link.textContent = 'Install uBlock Origin';
-            link.style.cssText = `
-                color: #3ea6ff;
-                font-weight: 500;
-                font-size: 14px;
-                text-decoration: none;
+            const title = document.createElement('h2');
+            title.textContent = 'YT Quick DL';
+            title.style.cssText = `
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 10px;
+                color: #f1f1f1;
             `;
 
-            const checkboxes = document.createElement('div');
-            checkboxes.style.cssText = `
-                margin-top: 16px;
-                font-size: 13px;
+            const scriptDesc = document.createElement('p');
+            scriptDesc.textContent = 'YT Quick DL is a simple userscript that adds a floating button on YouTube pages for quick video downloads via cobalt.tools.';
+            scriptDesc.style.marginBottom = '12px';
+
+            const cobaltInfo = document.createElement('div');
+            cobaltInfo.innerHTML = `
+                <strong>About cobalt.tools:</strong><br>
+                Cobalt.tools is one of the best free video and audio downloaders for various sites — ad-free, fast, and easy to use.<br><br>
+                <em>Important:</em><br>
+                - Configure your preferred video quality, audio quality, and file format on cobalt.tools first. It doesn’t let you choose these during download, but defaults are usually fine.<br>
+                - After opening cobalt.tools, <strong>you must manually click the ">>" button</strong> next to the URL input to start the download.<br>
+                - We've requested the maintainers to add auto-download support. They said it’s coming soon!<br><br>
+                See the script source on <a href="https://github.com/qomarhsn/YT-Quick-DL" target="_blank" style="color:#3ea6ff;text-decoration:none;">GitHub</a>.
             `;
+            cobaltInfo.style.marginBottom = '16px';
 
-            const checkboxLine = (id, text) => {
-                const label = document.createElement('label');
-                label.style.cssText = `
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: 8px;
-                    cursor: pointer;
-                `;
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = id;
-                checkbox.style.marginRight = '8px';
-                label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(text));
-                return label;
-            };
-
-            checkboxes.appendChild(checkboxLine('dont-show-again', "Don't show again"));
-            checkboxes.appendChild(checkboxLine('already-installed', "Already installed"));
+            const checkbox = document.createElement('label');
+            checkbox.style.cssText = 'display: flex; align-items: center; margin-top: 10px;';
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = 'dont-show-again';
+            input.style.marginRight = '8px';
+            checkbox.appendChild(input);
+            checkbox.appendChild(document.createTextNode("Don't show again"));
 
             const buttons = document.createElement('div');
-            buttons.style.cssText = `
-                display: flex;
-                justify-content: flex-end;
-                margin-top: 24px;
-            `;
+            buttons.style.cssText = 'display: flex; justify-content: flex-end; margin-top: 24px;';
 
             const confirmBtn = document.createElement('button');
             confirmBtn.textContent = 'Continue';
@@ -117,25 +94,23 @@
                 padding: 8px 16px;
                 font-size: 14px;
                 font-weight: 500;
-                border-radius: 2px;
+                border-radius: 4px;
                 cursor: pointer;
             `;
 
             buttons.appendChild(confirmBtn);
 
             popup.appendChild(title);
-            popup.appendChild(message);
-            popup.appendChild(link);
-            popup.appendChild(checkboxes);
+            popup.appendChild(scriptDesc);
+            popup.appendChild(cobaltInfo);
+            popup.appendChild(checkbox);
             popup.appendChild(buttons);
             overlay.appendChild(popup);
             document.body.appendChild(overlay);
 
             confirmBtn.addEventListener('click', async () => {
-                const cb1 = document.getElementById('dont-show-again');
-                const cb2 = document.getElementById('already-installed');
-                if (cb1.checked || cb2.checked) {
-                    await GM.setValue('skipUblockNotification', true);
+                if (input.checked) {
+                    await GM.setValue('skipInfoPopup', true);
                 }
                 document.body.removeChild(overlay);
                 resolve('continue');
@@ -144,17 +119,18 @@
     }
 
     async function handleDownloadClick() {
-        const skipped = await GM.getValue('skipUblockNotification', false);
+        const skipped = await GM.getValue('skipInfoPopup', false);
 
         const redirect = () => {
-            const newUrl = window.location.href.replace(/(www|m)\.youtube\.com/, 'www.ssyoutube.com');
-            window.open(newUrl, '_blank', 'width=800,height=600,toolbar=no,menubar=no,resizable=no,scrollbars=no,status=no');
+            const youtubeUrl = encodeURIComponent(window.location.href);
+            const cobaltUrl = `https://cobalt.tools/?u=${youtubeUrl}`;
+            window.open(cobaltUrl, '_blank');
         };
 
         if (skipped) {
             redirect();
         } else {
-            const result = await showUblockSuggestion();
+            const result = await showInfoPopup();
             if (result === 'continue') {
                 redirect();
             }
@@ -163,10 +139,10 @@
 
     function addDownloadButton() {
         const topControls = document.querySelector('.ytp-chrome-top');
-        if (!topControls || document.getElementById('ss-download-button')) return;
+        if (!topControls || document.getElementById('cobalt-download-button')) return;
 
         const btn = document.createElement('button');
-        btn.id = 'ss-download-button';
+        btn.id = 'cobalt-download-button';
         btn.className = 'ytp-button';
         btn.style.position = 'absolute';
         btn.style.top = '12px';
