@@ -1,33 +1,46 @@
 # YT Quick DL Userscript
-🚀 **YT Quick DL** is a simple yet powerful userscript that adds a floating download button to YouTube videos, allowing you to download videos instantly via ssyoutube.com. No clutter, no setup — just click and go!
+
+🚀 **YT Quick DL** is a minimal and simple userscript that adds a floating download button to YouTube videos. It redirects you to [cobalt.tools](https://cobalt.tools), offering a fast, user-friendly, and ad-free downloading experience. No clutter, just click and go!
 
 ---
 
 ## 🌟 Features
-- ⬇️ **One-Click Video Downloads** – Instantly download the current YouTube video through ssyoutube.com.
-- 🧼 **Adblock Reminder** – Get a friendly popup recommending uBlock Origin for a smoother, ad-free experience.
-- 🧠 **Smart Memory** – Remembers your preferences (e.g., “don’t show again” on popups).
-- 🖱️ **Non-Intrusive UI** – Minimal floating button integrated directly into the YouTube player.
-- 📱 **Mobile Support** – Works on both desktop and mobile YouTube URLs.
+
+- ⬇️ **One-Click Video Downloads** – Instantly download the current YouTube video via cobalt.tools.
+- 📣 **Introductory Popup** – Learn how the downloader works; dismiss it once, and it stays gone.
+- 🧠 **Smart Memory** – Remembers your choice to hide popups and preferences for a cleaner UX.
+- 🖱️ **Non-Intrusive UI** – Lightweight floating button integrated directly into the YouTube player.
+- 📱 **Mobile Support** – Works on both desktop and mobile YouTube websites.
 
 ---
 
 ## 📥 Installation
+
 ### **Step 1: Install a Userscript Manager**
-You'll need a userscript manager to run HoverBlurr:
+
+To run this script, install a userscript manager:
+
 - [Violentmonkey](https://violentmonkey.github.io/) (Recommended)
 - [Tampermonkey](https://www.tampermonkey.net/)
 
 ### **Step 2: Install YT Quick DL**
-Click the link below to install the userscript:
+
 ➡️ [**Install YT Quick DL**](https://github.com/qomarhsn/YT-Quick-DL/raw/main/script.user.js)
 
-### **Step 3: Enjoy!**
-Head to a YouTube video and click the new floating download button in the top-left corner of the video player. The video will open in a new ssyoutube.com tab for download.
+### **Step 3: Use It!**
+
+Go to any YouTube video. You’ll see a small download button at the top-left corner of the video player.
 
 ---
 
 ## ⚙️ How It Works
-1. **Click the Floating Button** – Appears at the top-left of the YouTube video.
-2. **Adblock Suggestion (Optional)** – First-time users will see a helpful tip to install [uBlock Origin](https://ublockorigin.com/) to avoid redirects and popups.
-3. **Download Opens in New Tab** – The video loads on ssyoutube.com, ready to download.
+
+1. **Click the Floating Button** – Visible on the top-left of every YouTube video.
+2. **Informational Popup (First Time Only)** – You'll get a short explanation about cobalt.tools; click **Continue** to proceed.
+3. **Instant Redirect** – You'll be taken to cobalt.tools with your video preloaded. Click the “>>” button to begin the download.
+
+---
+
+## ⚠️ Disclaimer
+
+Downloading videos from YouTube may violate its [terms of service](https://www.youtube.com/t/terms). Please ensure you have the right to download any content before proceeding.
